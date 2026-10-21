@@ -44,21 +44,33 @@ $tombol = ($mode === 'tambah') ? 'Simpan' : 'Ubah';
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $judul ?></title>
+      <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 </head>
 
 <body>
-    <h1><?= $judul ?></h1>
-    <?php if (!empty($error)) : ?>
-        <p style="color: red;"><?= $error ?></p>
-    <?php endif; ?>
-    <form method="POST" action="">
-        <input type="hidden" name="id" value="<?= htmlspecialchars($id) ?>">
-        <label for="nama">Nama:</label><br>
-        <input type="text" id="nama" name="nama" value="<?= htmlspecialchars($nama) ?>"><br><br>
-        <label for="lokasi">Lokasi:</label><br>
-        <input type="text" id="lokasi" name="lokasi" value="<?= htmlspecialchars($lokasi) ?>"><br><br>
-        <button type="submit"><?= $tombol ?></button>
-    </form>
+    <div class="layout">
+    <main class="content">
+        <h1><?= $judul ?></h1>
+        <?php if (!empty($error)) : ?>
+            <p style="color: red;"><?= $error ?></p>
+        <?php endif; ?>
+        <form method="POST" action="" class="row-3">
+            <input type="hidden" name="id" value="<?= htmlspecialchars($id) ?>">
+            <div class="col-auto"> 
+                <label for="nama">Nama:</label>
+                <input type="text" id="nama" class= "form-control" name="nama" value="<?= htmlspecialchars($nama) ?>">
+            </div>
+            
+            <div class="col-auto">
+                <label for="lokasi">Lokasi:</label>
+                <input type="text" id="lokasi" class="form-control" name="lokasi" value="<?= htmlspecialchars($lokasi) ?>">    
+            </div>
+            <div class="col-auto">
+                 <button type="submit" class="btn btn-danger"><?= $tombol ?></button>
+            </div>
+        </form>
+    </main>
+    </div>
 </body>
 
 </html>
