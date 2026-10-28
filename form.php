@@ -7,13 +7,43 @@ $lokasi = '';
 $error = '';
 
 // 3) proses saat tombol simpan ditekan
+// if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+//     $nama = $_POST['nama'] ?? '';
+//     $lokasi = $_POST['lokasi'] ?? '';
+
+//     // Validasi input
+//     if (empty($nama)) {
+//         $error = 'Nama Poli Tidak Boleh Kosong.';
+//     }else if(empty($lokasi)){
+//         $error = "Lokasi Poli Tidak Boleh Kosong.";
+//     } else {
+//         try {
+//             if ($mode === 'tambah') {
+//                 // Tambah data baru
+//                 $stmt = $koneksi->prepare("INSERT INTO poli (nama_poli, lokasi) VALUES (:nama, :lokasi)");
+//                 $stmt->execute([':nama' => $nama, ':lokasi' => $lokasi]);
+//             } else {
+//                 // Ubah data yang ada
+//                 $stmt = $koneksi->prepare("UPDATE poli SET nama_poli = :nama, lokasi = :lokasi WHERE id = :id");
+//                 $stmt->execute([':nama' => $nama, ':lokasi' => $lokasi, ':id' => $id]);
+//             }
+//             header('Location: index.php');
+//             exit;
+//         } catch (PDOException $e) {
+//             $error = "Terjadi kesalahan: " . $e->getMessage();
+//         }
+//     }
+// }
+// Pesan dengan sweet alert
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nama = $_POST['nama'] ?? '';
     $lokasi = $_POST['lokasi'] ?? '';
 
     // Validasi input
-    if (empty($nama) || empty($lokasi)) {
-        $error = 'Nama dan Lokasi harus diisi.';
+    if (empty($nama)) {
+        $error = 'Nama Poli Tidak Boleh Kosong.';
+    }else if(empty($lokasi)){
+        $error = "Lokasi Poli Tidak Boleh Kosong.";
     } else {
         try {
             if ($mode === 'tambah') {
@@ -71,6 +101,21 @@ $tombol = ($mode === 'tambah') ? 'Simpan' : 'Ubah';
         </form>
     </main>
     </div>
+
+<!-- Memanggil library sweetalert -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- untuk mengecek apakah variabel $error itu kosong atau tidak -->
+<?php if (!empty($error)): ?>
+    <script>
+        Swal.fire({
+            icon            : 'error',
+            title           : 'Ada isian yang kosong',
+            text            : <?= json_encode($error, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);?>,
+            confirmButtonText      : 'OK',
+            confirmButtonColor    : '#62f301'
+        })
+    </script>
+<?php endif; ?>
 </body>
 
 </html>
