@@ -35,15 +35,43 @@ $error = '';
 //     }
 // }
 // Pesan dengan sweet alert
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nama = $_POST['nama'] ?? '';
-    $lokasi = $_POST['lokasi'] ?? '';
+// if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+//     $nama = $_POST['nama'] ?? '';
+//     $lokasi = $_POST['lokasi'] ?? '';
 
-    // Validasi input
-    if (empty($nama)) {
-        $error = 'Nama Poli Tidak Boleh Kosong.';
-    }else if(empty($lokasi)){
-        $error = "Lokasi Poli Tidak Boleh Kosong.";
+//     // Validasi input
+//     if (empty($nama)) {
+//         $error = 'Nama Poli Tidak Boleh Kosong.';
+//     }else if(empty($lokasi)){
+//         $error = "Lokasi Poli Tidak Boleh Kosong.";
+//     } else {
+//         try {
+//             if ($mode === 'tambah') {
+//                 // Tambah data baru
+//                 $stmt = $koneksi->prepare("INSERT INTO poli (nama_poli, lokasi) VALUES (:nama, :lokasi)");
+//                 $stmt->execute([':nama' => $nama, ':lokasi' => $lokasi]);
+//             } else {
+//                 // Ubah data yang ada
+//                 $stmt = $koneksi->prepare("UPDATE poli SET nama_poli = :nama, lokasi = :lokasi WHERE id = :id");
+//                 $stmt->execute([':nama' => $nama, ':lokasi' => $lokasi, ':id' => $id]);
+//             }
+//             header('Location: index.php');
+//             exit;
+//         } catch (PDOException $e) {
+//             $error = "Terjadi kesalahan: " . $e->getMessage();
+//         }
+//     }
+// }
+// Validasi xss
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $nama   = trim($_POST['nama'] ?? '');
+    $lokasi = trim($_POST['lokasi'] ?? '');
+    if ($nama === ''){
+        $error  = 'Nama poli tidak boleh kosong';
+    }elseif (mb_strlen($nama)>100) {
+        $error  = 'Nama poli tidak boleh lebih dari 100 karakter';
+    }elseif (!preg_match('/^{\p{L}\p{N}\s.\-\/&()]+$/u', $nama)) {
+        $error  = 'Nama poli hanya boleh berisi huruf, angka, spasi';
     } else {
         try {
             if ($mode === 'tambah') {
@@ -97,6 +125,9 @@ $tombol = ($mode === 'tambah') ? 'Simpan' : 'Ubah';
             </div>
             <div class="col-auto">
                  <button type="submit" class="btn btn-danger"><?= $tombol ?></button>
+            </div>
+            <div class="col-auto">
+                 <a href="index.php"><input type="button" value="Kembali"></a>
             </div>
         </form>
     </main>
